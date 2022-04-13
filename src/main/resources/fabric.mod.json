@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "structurized-reborn",
+  "version": "1.4.0+1.18.2",
+  "name": "Structurized Reborn",
+  "description":"Simple library for registering new structures into villages. Credit to draylar for the original structurized: https://github.com/omega-mc/structurized/tree/1.18",
+  "authors": [
+    "fzzyhmstrs"
+  ],
+  "license": "MIT License",
+  "mixins": [
+    "structurized.mixins.json"
+  ],
+  "accessWidener": "structurized.accesswidener",
+  "depends": {
+    "minecraft": "1.18.x"
+  }
+}
