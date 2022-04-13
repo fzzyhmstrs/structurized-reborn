@@ -3,7 +3,7 @@
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"></a>
 </p>
 
-###THIS IS A REWORK OF DRAYLAR'S STRUCTURIZED. See the original here: https://github.com/omega-mc/structurized/tree/1.18
+### THIS IS A REWORK OF DRAYLAR'S STRUCTURIZED. See the original here: https://github.com/omega-mc/structurized/tree/1.18
 
 Structurized Reborn is a simple library focused on providing utilities for structures, features, jigsaws, and other world gen.
 
