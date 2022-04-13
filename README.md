@@ -1,24 +1,11 @@
 # Structurized
-[![](https://jitpack.io/v/Draylar/structurized.svg)](https://jitpack.io/#Draylar/structurized)
-[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
+<p align="left">
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"></a>
+</p>
+
+THIS IS A REWORK OF DRAYLAR'S STRUCTURIZED. See the original here: https://github.com/omega-mc/structurized/tree/1.18
 
 Structurized is a simple library focused on providing utilities for structures, features, jigsaws, and other world gen.
-
-### Installation
-
-`build.gradle`:
-```java
-repositories {
-	...
-	maven { url 'https://jitpack.io' }
-}
-```
-```groovy
-dependencies {
-	modImplementation 'com.github.Draylar:structurized:1.16-SNAPSHOT'
-}
-```
-
 
 ### Jigsaw Modification
 Structurized currently provides a callback that allows you to modify `StructurePool`s in jigsaws such as villages. Say we wanted to add `village/desert/houses/desert_small_house_1` to the plains house pool:
