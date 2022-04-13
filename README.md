@@ -22,8 +22,13 @@ The register method is quite flexible, with several optional parameters to use a
 
 Parameters:
 `poolId`: required, the target pool of structures to modify
+
 `structureId`: required, the new structure nbt location identifier
+
 `weight`: required, the probability of a structure being chosen for generation. A weight of 1 to 3 is about 1 structure per village
+
 `processor`: optional, defines custom generation tweaks to apply, like random mossy cobblestone
+
 `projection`: optional, defines the way the structure interacts with the ground (rigid in space or conform to the landscape)
+
 `type`: optional, defines the type of `structurePoolElement` you want. This isn't needed the majority of the time
