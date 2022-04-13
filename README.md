@@ -21,6 +21,7 @@ FabricStructurePoolRegistry.register(
 The register method is quite flexible, with several optional parameters to use as needed. In many cases you will be OK using the `registerSimple` method, but the main `register` method can be useful for doing something like adding the random mossy cobblestone that many village strcutres have, for example.
 
 Parameters:
+
 `poolId`: required, the target pool of structures to modify
 
 `structureId`: required, the new structure nbt location identifier
