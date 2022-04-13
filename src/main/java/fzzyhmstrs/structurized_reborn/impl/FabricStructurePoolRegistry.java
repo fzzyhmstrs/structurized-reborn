@@ -26,19 +26,19 @@ public class FabricStructurePoolRegistry {
     private static final Map<String,String> structures_key_ref = new HashMap<>();
     private static final Multimap<String, Pair<String,RegistryEntry<PlacedFeature>>> feature_structures = LinkedHashMultimap.create();
 
-    public static void register(Identifier poolId,Identifier id, int weight){
-        register(poolId,id,weight, StructureProcessorLists.EMPTY, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT, StructurePool.Projection.RIGID);
+    public static void registerSimple(Identifier poolId,Identifier structureId, int weight){
+        register(poolId,structureId,weight, StructureProcessorLists.EMPTY,StructurePool.Projection.RIGID, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT);
     }
 
-    public static void register(Identifier poolId,Identifier id, int weight, RegistryEntry<StructureProcessorList> processor){
-        register(poolId,id,weight,processor,StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT, StructurePool.Projection.RIGID);
+    public static void register(Identifier poolId,Identifier structureId, int weight, RegistryEntry<StructureProcessorList> processor){
+        register(poolId,structureId,weight,processor,StructurePool.Projection.RIGID,StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT);
     }
 
-    public static void register(Identifier poolId,Identifier id, int weight, RegistryEntry<StructureProcessorList> processor, StructurePoolElementType<?> type){
-        register(poolId,id,weight,processor,type, StructurePool.Projection.RIGID);
+    public static void register(Identifier poolId,Identifier structureId, int weight, RegistryEntry<StructureProcessorList> processor, StructurePool.Projection projection){
+        register(poolId,structureId,weight,processor,projection,StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT);
     }
 
-    public static void register(Identifier poolId,Identifier structureId, int weight, RegistryEntry<StructureProcessorList> processor, StructurePoolElementType<?> type, StructurePool.Projection projection){
+    public static void register(Identifier poolId,Identifier structureId, int weight, RegistryEntry<StructureProcessorList> processor, StructurePool.Projection projection ,StructurePoolElementType<?> type){
         String poolType = Objects.requireNonNull(Registry.STRUCTURE_POOL_ELEMENT.getId(type)).toString();
         String processorId = Objects.requireNonNull(BuiltinRegistries.STRUCTURE_PROCESSOR_LIST.getId(processor.value())).toString();
         String projectionId = projection.getId();
@@ -46,8 +46,8 @@ public class FabricStructurePoolRegistry {
         structures_key_ref.put(structureId.toString(),poolId.toString());
     }
 
-    public static void register(Identifier poolId, Identifier structureId, int weight, RegistryEntry<StructureProcessorList> processor, StructurePoolElementType<?> type, StructurePool.Projection projection, RegistryEntry<PlacedFeature> entry){
-        register(poolId,structureId,weight,processor,type, projection);
+    public static void register(Identifier poolId, Identifier structureId, int weight, StructurePool.Projection projection, RegistryEntry<PlacedFeature> entry){
+        register(poolId,structureId,weight,StructureProcessorLists.EMPTY,projection,StructurePoolElementType.FEATURE_POOL_ELEMENT);
         feature_structures.put(poolId.toString(), new Pair<>(structureId.toString(),entry));
     }
 
@@ -73,11 +73,11 @@ public class FabricStructurePoolRegistry {
 
     private static void addToPool(FabricStructurePool structurePool, Quintuple<String,String,String,String, Integer> quint, String key){
         List<StructurePoolElement> spe = new LinkedList<>();
-        if (Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)).equals(StructurePoolElementType.SINGLE_POOL_ELEMENT)){
+        if (Objects.equals(Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)), StructurePoolElementType.SINGLE_POOL_ELEMENT)){
             spe.add(StructurePoolElement.ofProcessedSingle(quint.a,RegistryEntry.of(BuiltinRegistries.STRUCTURE_PROCESSOR_LIST.get(new Identifier(quint.c)))).apply(StructurePool.Projection.getById(quint.d)));
-        } else if (Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)).equals(StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT)){
+        } else if (Objects.equals(Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)), StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT)){
             spe.add(StructurePoolElement.ofProcessedLegacySingle(quint.a,RegistryEntry.of(BuiltinRegistries.STRUCTURE_PROCESSOR_LIST.get(new Identifier(quint.c)))).apply(StructurePool.Projection.getById(quint.d)));
-        }else if (Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)).equals(StructurePoolElementType.FEATURE_POOL_ELEMENT)){
+        }else if (Objects.equals(Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)), StructurePoolElementType.FEATURE_POOL_ELEMENT)){
             List<StructurePoolElement> finalSpe = new LinkedList<>();
             feature_structures.get(key).forEach(
                     value -> {if(value.getLeft().equals(quint.a)){

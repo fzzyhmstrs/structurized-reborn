@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "structurized-reborn",
-  "version": "1.4.0+1.18.2",
+  "version": "1.18.2-01",
   "name": "Structurized Reborn",
   "description":"Simple library for registering new structures into villages. Credit to draylar for the original structurized: https://github.com/omega-mc/structurized/tree/1.18",
   "authors": [
