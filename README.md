@@ -3,9 +3,9 @@
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"></a>
 </p>
 
-### THIS IS A REWORK OF DRAYLAR'S STRUCTURIZED. See the original here: https://github.com/omega-mc/structurized/tree/1.18
+### THIS IS A REWORK OF DRAYLAR'S *STRUCTURIZED*. See the original here: https://github.com/omega-mc/structurized/tree/1.18
 
-Structurized Reborn is a simple library that helps with the addition of custom village structures.
+*Structurized Reborn* is a simple library that helps with the addition of custom village structures.
 
 ### Jigsaw Modification
 Structurized provides a registry that allows you to add custom structures to `StructurePool`s in jigsaws such as villages. Say we wanted to add `village/plains/houses/plains_small_house_1` to the desert house pool. Simply register the new structure to the desired pool and give it a weight and some optional modifiers. Call these `register` methods in the same place you would call any other server-focused registry event (registering items or blocks, for example)
@@ -17,7 +17,7 @@ FabricStructurePoolRegistry.register(
     StructureProcessorLists.MOSSIFY_10_PERCENT)                          //optional processor to add mossiness
 ```
 
-### Flexible registration
+### Flexible Registration
 The register method is quite flexible, with several optional parameters to use as needed. In many cases you will be OK using the `registerSimple` method, but the main `register` method can be useful for doing something like adding the random mossy cobblestone that many village structures have.
 
 Parameters:
@@ -41,4 +41,44 @@ StructurePoolAddCallback.EVENT.register(structurePool -> {
     if(structurePool.getUnderlying().getId().toString().equals("minecraft:village/plains/houses")) {
         structurePool.addStructurePoolElement(new SinglePoolElement("village/desert/houses/desert_small_house_1"), 50);
     }
-});```
+});
+```
+
+### Adding Dependency
+You can add this as a dependency to your project using modrinth's built in maven repository. The {VERSION} will be the version number of the version you are trying to work with. For example, the first version of this library was uploaded under version number **1.18.2-01**.
+
+In a build.gradle:
+```java
+repositories {
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
+dependencies {
+    modImplementation "maven.modrinth:Wd844r7Q:{VERSION}"
+    include("maven.modrinth:Wd844r7Q:{VERSION}")
+}
+```
+
+In a build.gradle.kts
+```kotlin
+repositories {
+    maven {
+        name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+}
+
+dependencies {
+    modImplementation("maven.modrinth:Wd844r7Q:{VERSION}")
+    include("maven.modrinth:Wd844r7Q:{VERSION}")
+}
+```
