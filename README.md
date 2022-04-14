@@ -17,6 +17,14 @@ FabricStructurePoolRegistry.register(
     StructureProcessorLists.MOSSIFY_10_PERCENT)                          //optional processor to add mossiness
 ```
 
+If you don't have any special considerations, you can use `registerSimple` to make your life a bit easier:
+```kotlin
+FabricStructurePoolRegistry.registerSimple(
+    Identifier("minecraft:village/desert/houses"),                       //the target pool 
+    Identifier("minecraft:village/plains/houses/plains_small_house_1"),  //the new structure nbt to add
+    2)                                                                   //the weight of the structure in the pool
+```
+
 ### Flexible Registration
 The register method is quite flexible, with several optional parameters to use as needed. In many cases you will be OK using the `registerSimple` method, but the main `register` method can be useful for doing something like adding the random mossy cobblestone that many village structures have.
 
