@@ -116,13 +116,14 @@ public class FabricStructurePoolRegistry {
 
     private static void addToPool(FabricStructurePool structurePool, Quintuple<String,String,String,String, Integer> quint, String key){
         List<StructurePoolElement> spe = new LinkedList<>();
-        if (Objects.equals(Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)), StructurePoolElementType.SINGLE_POOL_ELEMENT)){
+        StructurePoolElementType<?> type = Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b));
+        if (Objects.equals(type, StructurePoolElementType.SINGLE_POOL_ELEMENT)){
             spe.add(StructurePoolElement.ofProcessedSingle(quint.a,RegistryEntry.of(BuiltinRegistries.STRUCTURE_PROCESSOR_LIST.get(new Identifier(quint.c)))).apply(StructurePool.Projection.getById(quint.d)));
-        } else if (Objects.equals(Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)), StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT)){
+        } else if (Objects.equals(type, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT)){
             spe.add(StructurePoolElement.ofProcessedLegacySingle(quint.a,RegistryEntry.of(BuiltinRegistries.STRUCTURE_PROCESSOR_LIST.get(new Identifier(quint.c)))).apply(StructurePool.Projection.getById(quint.d)));
-        }else if (Objects.equals(Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)), StructurePoolElementType.LIST_POOL_ELEMENT)){
+        }else if (Objects.equals(type, StructurePoolElementType.LIST_POOL_ELEMENT)){
             spe.addAll(list_structures.get(key));
-        }else if (Objects.equals(Registry.STRUCTURE_POOL_ELEMENT.get(new Identifier(quint.b)), StructurePoolElementType.FEATURE_POOL_ELEMENT)){
+        }else if (Objects.equals(type, StructurePoolElementType.FEATURE_POOL_ELEMENT)){
             List<StructurePoolElement> finalSpe = new LinkedList<>();
             feature_structures.get(key).forEach(
                     value -> {if(value.getLeft().equals(quint.a)){
