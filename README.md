@@ -8,13 +8,13 @@
 Structurized Reborn is a simple library that helps with the addition of custom village structures.
 
 ### Jigsaw Modification
-Structurized provides a registry that allows you to add custom structures to `StructurePool`s in jigsaws such as villages. Say we wanted to add `village/plains/houses/plains_small_house_1` to the plains house pool. Simply register the new structure to the desired pool and give it a weight and some optional modifiers. Call these `register` methods in the same place you would call any other server-focused registry event (registering items or blocks, for example)
+Structurized provides a registry that allows you to add custom structures to `StructurePool`s in jigsaws such as villages. Say we wanted to add `village/plains/houses/plains_small_house_1` to the desert house pool. Simply register the new structure to the desired pool and give it a weight and some optional modifiers. Call these `register` methods in the same place you would call any other server-focused registry event (registering items or blocks, for example)
 ```kotlin
 FabricStructurePoolRegistry.register(
-    Identifier("minecraft:village/desert/houses"),
-    Identifier("minecraft:village/plains/houses/plains_small_house_1"),
-    2, 
-    StructureProcessorLists.MOSSIFY_10_PERCENT)
+    Identifier("minecraft:village/desert/houses"),                       //the target pool 
+    Identifier("minecraft:village/plains/houses/plains_small_house_1"),  //the new structure nbt to add
+    2,                                                                   //the weight of the structure in the pool
+    StructureProcessorLists.MOSSIFY_10_PERCENT)                          //optional processor to add mossiness
 ```
 
 ### Flexible registration
