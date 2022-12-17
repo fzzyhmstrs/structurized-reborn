@@ -12,6 +12,8 @@ import net.minecraft.structure.processor.StructureProcessorList;
 import net.minecraft.structure.processor.StructureProcessorLists;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.math.random.LocalRandom;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
@@ -106,10 +108,13 @@ public class FabricStructurePoolRegistry {
 
     public static void processRegistry(FabricStructurePool structurePool){
         String poolId = structurePool.getUnderlyingPool().getId().toString();
+        System.out.println(poolId);
         for (String key : structures_info.keys()){
             if (Objects.equals(key, poolId)){
+                System.out.println("found a match with " + key);
                 structures_info.get(key).forEach(value -> addToPool(structurePool,value, key)
                 );
+                structurePool.getUnderlyingPool().getElementIndicesInRandomOrder(new LocalRandom(5)).forEach(value -> System.out.println(value.toString()));
             }
         }
     }
@@ -120,6 +125,7 @@ public class FabricStructurePoolRegistry {
         if (Objects.equals(type, StructurePoolElementType.SINGLE_POOL_ELEMENT)){
             spe.add(StructurePoolElement.ofProcessedSingle(quint.a,RegistryEntry.of(BuiltinRegistries.STRUCTURE_PROCESSOR_LIST.get(new Identifier(quint.c)))).apply(StructurePool.Projection.getById(quint.d)));
         } else if (Objects.equals(type, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT)){
+            System.out.println("adding" + quint.a);
             spe.add(StructurePoolElement.ofProcessedLegacySingle(quint.a,RegistryEntry.of(BuiltinRegistries.STRUCTURE_PROCESSOR_LIST.get(new Identifier(quint.c)))).apply(StructurePool.Projection.getById(quint.d)));
         }else if (Objects.equals(type, StructurePoolElementType.LIST_POOL_ELEMENT)){
             spe.addAll(list_structures.get(key));
