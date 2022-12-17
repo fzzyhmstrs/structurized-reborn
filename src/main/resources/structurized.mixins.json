@@ -3,9 +3,10 @@
   "package": "fzzyhmstrs.structurized_reborn.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "DynamicRegistryManagerMixin",
+    "RegistryLoaderMixin",
     "PoolStructurePieceMixin",
-    "StructurePoolAccessor"
+    "StructurePoolAccessor",
+    "StructurePoolsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,21 +1,23 @@
 package fzzyhmstrs.structurized_reborn.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mojang.datafixers.util.Pair;
-
 import fzzyhmstrs.structurized_reborn.api.FabricStructurePool;
 import fzzyhmstrs.structurized_reborn.mixin.StructurePoolAccessor;
 import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
+import net.minecraft.util.Identifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FabricStructurePoolImpl implements FabricStructurePool {
     private final StructurePool pool;
+    private final Identifier id;
 
-    public FabricStructurePoolImpl(StructurePool pool) {
+    public FabricStructurePoolImpl(StructurePool pool, Identifier id) {
         this.pool = pool;
+        this.id = id;
     }
 
     @Override
@@ -45,5 +47,10 @@ public class FabricStructurePoolImpl implements FabricStructurePool {
     @Override
     public StructurePool getUnderlyingPool() {
         return pool;
+    }
+
+    @Override
+    public Identifier getId() {
+        return id;
     }
 }
