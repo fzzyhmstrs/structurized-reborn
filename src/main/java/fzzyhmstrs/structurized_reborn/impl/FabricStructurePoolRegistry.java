@@ -27,7 +27,7 @@ public class FabricStructurePoolRegistry {
     private static final Map<String,String> structures_key_ref = new HashMap<>();
     private static final Multimap<String, Pair<String, RegistryEntry<PlacedFeature>>> feature_structures = LinkedHashMultimap.create();
     private static final Multimap<String, ListPoolElement> list_structures = LinkedHashMultimap.create();
-    public static Registerable<StructurePool> poolsRegisterable;
+    public static RegistryEntryLookup<StructureProcessorList> registryEntryLookup;
 
     public static void registerSimple(Identifier poolId,Identifier structureId, int weight){
         register(poolId,structureId,weight,StructureProcessorLists.EMPTY,StructurePool.Projection.RIGID, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT);
@@ -70,14 +70,13 @@ public class FabricStructurePoolRegistry {
 
     public static void processRegistry(FabricStructurePool structurePool){
         String poolId = structurePool.getId().toString();
-        RegistryEntryLookup<StructureProcessorList> registryEntryLookup = poolsRegisterable.getRegistryLookup(RegistryKeys.PROCESSOR_LIST);
-        System.out.println(poolId);
+        //System.out.println(poolId);
         for (String key : structures_info.keys()){
             if (Objects.equals(key, poolId)){
-                System.out.println("found a match with " + key);
+                //System.out.println("found a match with " + key);
                 structures_info.get(key).forEach(value -> addToPool(structurePool,value, key,registryEntryLookup)
                 );
-                structurePool.getUnderlyingPool().getElementIndicesInRandomOrder(new LocalRandom(5)).forEach(value -> System.out.println(value.toString()));
+                //structurePool.getUnderlyingPool().getElementIndicesInRandomOrder(new LocalRandom(5)).forEach(value -> System.out.println(value.toString()));
             }
         }
     }
@@ -89,7 +88,7 @@ public class FabricStructurePoolRegistry {
             RegistryEntry<StructureProcessorList> entry = registryEntryLookup.getOrThrow(quint.c);
             spe.add(StructurePoolElement.ofProcessedSingle(quint.a,entry).apply(StructurePool.Projection.getById(quint.d)));
         } else if (Objects.equals(type, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT)){
-            System.out.println("adding" + quint.a);
+            //System.out.println("adding " + quint.a);
             RegistryEntry<StructureProcessorList> entry = registryEntryLookup.getOrThrow(quint.c);
             spe.add(StructurePoolElement.ofProcessedLegacySingle(quint.a,entry).apply(StructurePool.Projection.getById(quint.d)));
         }else if (Objects.equals(type, StructurePoolElementType.LIST_POOL_ELEMENT)){
