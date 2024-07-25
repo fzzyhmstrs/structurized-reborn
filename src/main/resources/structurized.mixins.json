@@ -1,12 +1,11 @@
 {
   "required": true,
   "package": "fzzyhmstrs.structurized_reborn.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "RegistryLoaderMixin",
     "PoolStructurePieceMixin",
-    "StructurePoolAccessor",
-    "StructurePoolsMixin"
+    "StructurePoolAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

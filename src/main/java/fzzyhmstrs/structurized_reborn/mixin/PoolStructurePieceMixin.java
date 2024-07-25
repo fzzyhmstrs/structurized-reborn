@@ -19,23 +19,23 @@ public class PoolStructurePieceMixin {
     @Shadow @Final protected StructurePoolElement poolElement;
 
     @Inject(method = "writeNbt", at = @At(value = "TAIL"))
-    private void fixPoolElement(StructureContext context, NbtCompound nbt, CallbackInfo ci){
+    private void fixPoolElement(StructureContext context, NbtCompound nbt, CallbackInfo ci) {
         if (!nbt.contains("pool_element")) {
-                NbtCompound nbtEl = new NbtCompound();
-                String poolId = poolElement.toString();
-                String poolId2 = poolId.substring(0,poolId.length()-2);
-                String split = "\\[";
-                String[] poolIdArray = poolId2.split(split);
-                String poolLocation = poolIdArray[poolIdArray.length - 1];
-                Triple<String, String, String> info;
-                if ((info = FabricStructurePoolRegistry.getPoolStructureElementInfo(poolLocation)) != null){
-                    nbtEl.putString("element_type", info.getLeft());
-                    nbtEl.putString("location",poolLocation);
-                    nbtEl.putString("processors", info.getMiddle());
-                    nbtEl.putString("projection", info.getRight());
-                    nbt.put("pool_element",nbtEl);
-                }
-                //System.out.println(nbt);
+            NbtCompound nbtElement = new NbtCompound();
+            String poolId = poolElement.toString();
+            String poolId2 = poolId.substring(0,poolId.length()-2);
+            String split = "\\[";
+            String[] poolIdArray = poolId2.split(split);
+            String poolLocation = poolIdArray[poolIdArray.length - 1];
+            Triple<String, String, String> info = FabricStructurePoolRegistry.getPoolStructureElementInfo(poolLocation);
+            if (info != null) {
+                nbtElement.putString("element_type", info.getLeft());
+                nbtElement.putString("location", poolLocation);
+                nbtElement.putString("processors", info.getMiddle());
+                nbtElement.putString("projection", info.getRight());
+                nbt.put("pool_element", nbtElement);
+            }
+            //System.out.println(nbt);
         }
     }
 

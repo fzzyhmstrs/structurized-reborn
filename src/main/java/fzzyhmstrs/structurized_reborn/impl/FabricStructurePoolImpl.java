@@ -38,7 +38,7 @@ public class FabricStructurePoolImpl implements FabricStructurePool {
             pool.setElementCounts(list);
         }
 
-        //adds to elements list
+        // adds to elements list
         for (int i = 0; i < weight; i++) {
             pool.getElements().add(element);
         }

@@ -3,7 +3,7 @@
   "id": "structurized-reborn",
   "version": "${version}",
   "name": "Structurized Reborn",
-  "description":"Simple library for registering new structures into villages. Credit to draylar for the original structurized: https://github.com/omega-mc/structurized/tree/1.18",
+  "description": "Simple library for registering new structures into villages. Credit to draylar for the original structurized: https://github.com/omega-mc/structurized/tree/1.18",
   "authors": [
     "fzzyhmstrs"
   ],
@@ -11,9 +11,8 @@
   "mixins": [
     "structurized.mixins.json"
   ],
-  "accessWidener": "structurized.accesswidener",
   "depends": {
-    "minecraft": ">=1.19.4",
+    "minecraft": ">=1.21",
     "fabric-api": "*"
   }
 }
