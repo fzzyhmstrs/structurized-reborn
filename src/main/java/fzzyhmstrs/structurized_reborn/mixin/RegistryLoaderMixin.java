@@ -3,7 +3,6 @@ package fzzyhmstrs.structurized_reborn.mixin;
 import com.mojang.serialization.Decoder;
 import fzzyhmstrs.structurized_reborn.api.StructurePoolAddCallback;
 import fzzyhmstrs.structurized_reborn.impl.FabricStructurePoolImpl;
-import fzzyhmstrs.structurized_reborn.impl.FabricStructurePoolRegistry;
 import net.minecraft.registry.*;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.structure.pool.StructurePool;
@@ -23,19 +22,18 @@ public class RegistryLoaderMixin {
     @Inject(method = "loadFromResource(Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/registry/RegistryOps$RegistryInfoGetter;Lnet/minecraft/registry/MutableRegistry;Lcom/mojang/serialization/Decoder;Ljava/util/Map;)V", at = @At("TAIL"))
     private static <E> void load(ResourceManager resourceManager, RegistryOps.RegistryInfoGetter infoGetter, MutableRegistry<E> registry, Decoder<E> elementDecoder, Map<RegistryKey<?>, Exception> errors, CallbackInfo ci) {
         if (registry.getKey().equals(RegistryKeys.TEMPLATE_POOL)) {
+            Optional<RegistryOps.RegistryInfo<StructureProcessorList>> optionalRegistryInfo = infoGetter.getRegistryInfo(RegistryKeys.PROCESSOR_LIST);
+            if (optionalRegistryInfo.isEmpty()){
+                return;
+            }
+            RegistryEntryLookup<StructureProcessorList> registryEntryLookup = optionalRegistryInfo.get().entryLookup();
             for (E registryEntry : registry.stream().toList()) {
                 if (!(registryEntry instanceof StructurePool pool)) {
                     continue;
                 }
                 Identifier id = registry.getId(registryEntry);
-                if (FabricStructurePoolRegistry.registryEntryLookup == null) {
-                    Optional<RegistryOps.RegistryInfo<StructureProcessorList>> optionalRegistryInfo = infoGetter.getRegistryInfo(RegistryKeys.PROCESSOR_LIST);
-                    optionalRegistryInfo.ifPresent(info -> {
-                        FabricStructurePoolRegistry.registryEntryLookup = info.entryLookup();
-                    });
-                }
                 //System.out.println("successfully registered a callback");
-                StructurePoolAddCallback.EVENT.invoker().onAdd(new FabricStructurePoolImpl(pool, id));
+                StructurePoolAddCallback.EVENT.invoker().onAdd(new FabricStructurePoolImpl(pool, id), registryEntryLookup);
             }
         }
     }

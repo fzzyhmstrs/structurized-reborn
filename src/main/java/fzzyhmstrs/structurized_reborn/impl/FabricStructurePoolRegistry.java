@@ -11,29 +11,32 @@ import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.structure.pool.StructurePoolElementType;
 import net.minecraft.structure.processor.StructureProcessorList;
-import net.minecraft.structure.processor.StructureProcessorLists;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class FabricStructurePoolRegistry {
 
+    private static final RegistryKey<StructureProcessorList> EMPTY_PROCESSOR_KEY = RegistryKey.of(RegistryKeys.PROCESSOR_LIST, Identifier.ofVanilla("empty"));
+
     private static final Multimap<String, Quintuple<String, String, RegistryKey<StructureProcessorList>, String, Integer>> structuresInfo = LinkedHashMultimap.create();
-    private static final Map<String, String> structuresKeyRef = new HashMap<>();
+    private static final Map<String, String> structuresKeyRef = new java.util.HashMap<>();
     private static final Multimap<String, Pair<String, RegistryEntry<PlacedFeature>>> featureStructures = LinkedHashMultimap.create();
     private static final Multimap<String, ListPoolElement> listStructures = LinkedHashMultimap.create();
-    public static RegistryEntryLookup<StructureProcessorList> registryEntryLookup;
 
     static {
         StructurePoolAddCallback.EVENT.register(FabricStructurePoolRegistry::processRegistry);
     }
 
     public static void registerSimple(Identifier poolId, Identifier structureId, int weight) {
-        register(poolId, structureId, weight, StructureProcessorLists.EMPTY, StructurePool.Projection.RIGID, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT);
+        register(poolId, structureId, weight, EMPTY_PROCESSOR_KEY, StructurePool.Projection.RIGID, StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT);
     }
 
     public static void register(Identifier poolId, Identifier structureId, int weight, RegistryKey<StructureProcessorList> processor) {
@@ -52,12 +55,12 @@ public class FabricStructurePoolRegistry {
     }
 
     public static void registerFeature(Identifier poolId, Identifier structureId, int weight, StructurePool.Projection projection, RegistryEntry<PlacedFeature> entry) {
-        register(poolId, structureId, weight, StructureProcessorLists.EMPTY, projection, StructurePoolElementType.FEATURE_POOL_ELEMENT);
+        register(poolId, structureId, weight, EMPTY_PROCESSOR_KEY, projection, StructurePoolElementType.FEATURE_POOL_ELEMENT);
         featureStructures.put(poolId.toString(), new Pair<>(structureId.toString(), entry));
     }
 
     public static void registerList(Identifier poolId, int weight, ListPoolElement listPoolElement) {
-        register(poolId, Identifier.ofVanilla("air"), weight, StructureProcessorLists.EMPTY, StructurePool.Projection.RIGID, StructurePoolElementType.LIST_POOL_ELEMENT);
+        register(poolId, Identifier.ofVanilla("air"), weight, EMPTY_PROCESSOR_KEY, StructurePool.Projection.RIGID, StructurePoolElementType.LIST_POOL_ELEMENT);
         listStructures.put(poolId.toString(), listPoolElement);
     }
 
@@ -71,14 +74,11 @@ public class FabricStructurePoolRegistry {
         return null;
     }
 
-    public static void processRegistry(FabricStructurePool structurePool) {
+    public static void processRegistry(FabricStructurePool structurePool, RegistryEntryLookup<StructureProcessorList> registryEntryLookup) {
         String poolId = structurePool.getId().toString();
-        //System.out.println(poolId);
         for (String key : structuresInfo.keys()) {
             if (Objects.equals(key, poolId)) {
-                //System.out.println("found a match with " + key);
                 structuresInfo.get(key).forEach(value -> addToPool(structurePool, value, key, registryEntryLookup));
-                //structurePool.getUnderlyingPool().getElementIndicesInRandomOrder(new LocalRandom(5)).forEach(value -> System.out.println(value.toString()));
             }
         }
     }
@@ -90,7 +90,6 @@ public class FabricStructurePoolRegistry {
             RegistryEntry<StructureProcessorList> entry = registryEntryLookup.getOrThrow(quint.c);
             spe.add(StructurePoolElement.ofProcessedSingle(quint.a, entry).apply(StructurePool.Projection.getById(quint.d)));
         } else if (type == StructurePoolElementType.LEGACY_SINGLE_POOL_ELEMENT) {
-            //System.out.println("adding " + quint.a);
             RegistryEntry<StructureProcessorList> entry = registryEntryLookup.getOrThrow(quint.c);
             spe.add(StructurePoolElement.ofProcessedLegacySingle(quint.a, entry).apply(StructurePool.Projection.getById(quint.d)));
         } else if (type == StructurePoolElementType.LIST_POOL_ELEMENT) {
@@ -106,13 +105,12 @@ public class FabricStructurePoolRegistry {
             );
             spe.addAll(finalSpe);
         } else {
-            spe.add(StructurePoolElement.ofEmpty().apply(StructurePool.Projection.RIGID));
+            RegistryEntry<StructureProcessorList> entry = registryEntryLookup.getOrThrow(EMPTY_PROCESSOR_KEY);
+            spe.add(StructurePoolElement.ofProcessedLegacySingle("minecraft:air", entry).apply(StructurePool.Projection.RIGID));
         }
         spe.forEach(value -> structurePool.addStructurePoolElement(value, quint.e));
     }
 
     private record Quintuple<A, B, C, D, E>(A a, B b, C c, D d, E e) {
-
-
     }
 }

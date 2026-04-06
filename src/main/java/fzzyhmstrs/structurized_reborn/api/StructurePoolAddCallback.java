@@ -2,6 +2,8 @@ package fzzyhmstrs.structurized_reborn.api;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.structure.processor.StructureProcessorList;
 
 /**
  * A callback for newly added structure pools.
@@ -23,12 +25,12 @@ public interface StructurePoolAddCallback {
      * Called when structure pools are reloaded at data pack reload time.
      */
     Event<StructurePoolAddCallback> EVENT = EventFactory.createArrayBacked(StructurePoolAddCallback.class,
-            listeners -> initialPool -> {
+            listeners -> (initialPool, registryEntryLookup) -> {
                 for (StructurePoolAddCallback listener : listeners) {
-                    listener.onAdd(initialPool);
+                    listener.onAdd(initialPool, registryEntryLookup);
                 }
             }
     );
 
-    void onAdd(FabricStructurePool initialPool);
+    void onAdd(FabricStructurePool initialPool, RegistryEntryLookup<StructureProcessorList> registryEntryLookup);
 }
